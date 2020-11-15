@@ -9,7 +9,7 @@ public class User {
 
 	private Integer id;
 	
-	@Size(min=2)
+	@Size(min=2, message="Name cannot be less than 2 chars")
 	private String name;
 	
 	@Past

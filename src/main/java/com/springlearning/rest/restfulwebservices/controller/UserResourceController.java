@@ -3,10 +3,16 @@ package com.springlearning.rest.restfulwebservices.controller;
 import java.net.URI;
 import java.util.List;
 
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,14 +40,22 @@ public class UserResourceController {
 	// retrieve one user
 
 	@GetMapping("/users/{id}")
-	public User retrieveUser(@PathVariable int id) {
+	public EntityModel<User> retrieveUser(@PathVariable int id) {
 		User user = service.findOne(id);
 		
 		if(null == user) {
 			throw new UserNotFoundException("id: " + id);
 		}
 		
-		return user;
+		//"all-users", SERVER_PATH + "/users"
+		//retrieveAllUsers
+		EntityModel<User> entityModel = EntityModel.of(user);
+		Link link = linkTo(
+				methodOn(this.getClass()).retrieveAllUsers()).withRel("all-users");
+		
+		entityModel.add(link);
+		
+		return entityModel;
 	}
 
 	// input - details of user
