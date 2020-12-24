@@ -1,10 +1,12 @@
 package com.springlearning.rest.restfulwebservices.bean;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
@@ -18,6 +20,13 @@ public class User {
 	protected User() {
 		
 	}
+	
+	public User(Integer id, String name, Date birthdate) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.birthdate = birthdate;
+	}
 
 	@Id
 	@GeneratedValue
@@ -30,6 +39,11 @@ public class User {
 	@Past
 	@ApiModelProperty(notes = "Future dates are not allowed in here")
 	private Date birthdate;
+	
+	@OneToMany(mappedBy = "user")
+	private List<Post> posts;
+
+	
 
 	public Integer getId() {
 		return id;
@@ -54,19 +68,19 @@ public class User {
 	public void setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
 	}
+	
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
+	}
 
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", birthdate=" + birthdate + "]";
 	}
 
-	public User(Integer id, String name, Date birthdate) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.birthdate = birthdate;
-	}
-	
-	
 	
 }
